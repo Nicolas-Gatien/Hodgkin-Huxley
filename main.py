@@ -11,17 +11,17 @@ el = 10.6
 gl = 0.3
 
 def upd(x, dlta_x):
-    return (x + dlta_x * dt)
+    return x + dlta_x * dt
 
 def mnh0(a, b):
-    return (a / (a + b))
+    return a / (a + b)
 
-def am (v) : return ((2.5 - 0.1 * v) / (m.exp(2.5 - 0.1 * v) - 1))
-def bm (v) : return (4 * m.exp((-1) * v / 18))
-def an (v) : return ((0.1 - 0.01 * v) / (m.exp(1 - (0.1 * v)) - 1))
-def bn (v) : return (0.125 / m.exp((-1) * v / 80))
-def ah (v) : return (0.07 * m.exp((-1) * v / 20))
-def bh (v) : return (1 / (m.exp(3 - (0.1) * v) + 1))
+def am (v) : return (2.5 - 0.1 * v) / (m.exp(2.5 - 0.1 * v) - 1)
+def bm (v) : return 4 * m.exp((-1) * v / 18)
+def an (v) : return (0.1 - 0.01 * v) / (m.exp(1 - (0.1 * v)) - 1)
+def bn (v) : return 0.125 / m.exp((-1) * v / 80)
+def ah (v) : return 0.07 * m.exp((-1) * v / 20)
+def bh (v) : return 1 / (m.exp(3 - (0.1) * v) + 1)
 
 am0 = am(0)
 bm0 = bm(0)
@@ -35,20 +35,20 @@ n0 = mnh0(an0, bn0)
 h0 = mnh0(ah0, bh0)
 
 def ina(m, h, v):
-    return (gna * (m ** 3) * h * (v - ena))
+    return gna * (m ** 3) * h * (v - ena)
 
 def ik(n, v):
-    return (gk * (n ** 4) * (v - ek))
+    return gk * (n ** 4) * (v - ek)
 
 def il(v):
-    return (gl * (v - el))
+    return gl * (v - el)
 
 def newS(v, m, n, h, t):
-    if (t < 5.0) or (t > 6.0):
+    if t < 5.0 or t > 6.0:
         istim = 0.0
     else:
         istim = 20.0
-    dv = (istim - (ina(m, h, v) + ik(n,v) + il(v)))
+    dv = istim - (ina(m, h, v) + ik(n,v) + il(v))
     dm = am(v) * (1 - m) - bm(v) * m
     dn = an(v) * (1 - n) - bn(v) * n
     dh = ah(v) * (1 - h) - bh(v) * h
