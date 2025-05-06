@@ -1,5 +1,5 @@
-import pylab as pyl
-import math as m
+import pylab
+import math
 
 vinit = 0.0
 dt = 0.01
@@ -16,12 +16,12 @@ def upd(x, dlta_x):
 def mnh0(a, b):
     return a / (a + b)
 
-def am (v) : return (2.5 - 0.1 * v) / (m.exp(2.5 - 0.1 * v) - 1)
-def bm (v) : return 4 * m.exp((-1) * v / 18)
-def an (v) : return (0.1 - 0.01 * v) / (m.exp(1 - (0.1 * v)) - 1)
-def bn (v) : return 0.125 / m.exp((-1) * v / 80)
-def ah (v) : return 0.07 * m.exp((-1) * v / 20)
-def bh (v) : return 1 / (m.exp(3 - (0.1) * v) + 1)
+def am (v) : return (2.5 - 0.1 * v) / (math.exp(2.5 - 0.1 * v) - 1)
+def bm (v) : return 4 * math.exp((-1) * v / 18)
+def an (v) : return (0.1 - 0.01 * v) / (math.exp(1 - (0.1 * v)) - 1)
+def bn (v) : return 0.125 / math.exp((-1) * v / 80)
+def ah (v) : return 0.07 * math.exp((-1) * v / 20)
+def bh (v) : return 1 / (math.exp(3 - (0.1) * v) + 1)
 
 am0 = am(0)
 bm0 = bm(0)
@@ -78,8 +78,8 @@ for i in (range(2, 3000)):
     hs.append(d)
     ts.append(e) 
 
-pyl.plot(ts, ms)
-pyl.plot(ts, ns)
-pyl.plot(ts, hs)
+pylab.plot(ts, ms)
+pylab.plot(ts, ns)
+pylab.plot(ts, hs)
 
-pyl.show()
+pylab.show()
