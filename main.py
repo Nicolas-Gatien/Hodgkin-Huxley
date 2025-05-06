@@ -23,16 +23,9 @@ def bn (v) : return 0.125 / math.exp((-1) * v / 80)
 def ah (v) : return 0.07 * math.exp((-1) * v / 20)
 def bh (v) : return 1 / (math.exp(3 - (0.1) * v) + 1)
 
-am0 = am(0)
-bm0 = bm(0)
-an0 = an(0)
-bn0 = bn(0)
-ah0 = ah(0)
-bh0 = bh(0)
-
-m0 = mnh0(am0, bm0)
-n0 = mnh0(an0, bn0)
-h0 = mnh0(ah0, bh0)
+m0 = mnh0(am(0), bm(0)) 
+n0 = mnh0(an(0), bn(0))
+h0 = mnh0(ah(0), bh(0))
 
 def ina(m, h, v):
     return gna * (m ** 3) * h * (v - ena)
