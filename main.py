@@ -2,7 +2,7 @@ import pylab
 import math
 
 INITIAL_VOLTAGE = 0.0
-TIMESTEP = 0.01
+TIMESCALE = 0.01
 e_SODIUM = 115
 SODIUM_CHANNEL_CONDUCTANCE = 120
 e_POTASSIUM = -12
@@ -10,8 +10,8 @@ POTASSIUM_CHANNEL_CONDUCTANCE = 36
 e_LEAK_CURRENT = 10.6
 LEAK_CURRENT_CHANNEL_CONDUCTANCE = 0.3
 
-def update(x, dlta_x):
-    return x + dlta_x * TIMESTEP
+def update(x, delta_x):
+    return x + delta_x * TIMESCALE
 
 def mnh0(a, b):
     return a / (a + b)
@@ -38,34 +38,33 @@ def calculate_potassium(n, voltage):
 def calculate_leak_currents(voltage):
     return LEAK_CURRENT_CHANNEL_CONDUCTANCE * (voltage - e_LEAK_CURRENT)
 
+def evaluate_channel_formula(channel, voltage, a, b):
+    return a(voltage) * (1 - channel) - b(voltage) * channel
+
 def new_step(voltage, m, n, h, current_timestep):
     if current_timestep < 5.0 or current_timestep > 6.0:
         injected_stimulation = 0.0
     else:
         injected_stimulation = 20.0
     
-    d_voltage = injected_stimulation - (calculate_sodium(m, h, voltage) + calculate_potassium(n, voltage) + calculate_leak_currents(voltage))
-    dm = am(voltage) * (1 - m) - bm(voltage) * m
-    dn = an(voltage) * (1 - n) - bn(voltage) * n
-    dh = ah(voltage) * (1 - h) - bh(voltage) * h
-    voltage_p = update(voltage, d_voltage)
-    timestep_p = current_timestep + TIMESTEP
-    mp = update(m, dm)
-    np = update(n, dn)
-    hp = update(h, dh)
-    return (voltage_p, mp, np, hp, timestep_p)
+    raw_voltage = injected_stimulation - (calculate_sodium(m, h, voltage) + calculate_potassium(n, voltage) + calculate_leak_currents(voltage))
+    raw_m = evaluate_channel_formula(m, voltage, am, bm)
+    raw_n = evaluate_channel_formula(n, voltage, an, bn)
+    raw_h = evaluate_channel_formula(h, voltage, ah, bh)
 
-voltage_s = []
-ms = []
-ns = []
-hs = []
-timestep_s = []
+    new_voltage = update(voltage, raw_voltage)
+    new_timestep = current_timestep + TIMESCALE
+    new_m = update(m, raw_m)
+    new_n = update(n, raw_n)
+    new_h = update(h, raw_h)
+    return (new_voltage, new_m, new_n, new_h, new_timestep)
+
 a, b, c, d, e = new_step(INITIAL_VOLTAGE, m0, n0, h0, 0.0)
-voltage_s.append(a)
-ms.append(b)
-ns.append(c)
-hs.append(d)
-timestep_s.append(e)
+voltage_s = [a]
+ms = [b]
+ns = [c]
+hs = [d]
+timestep_s = [e]
 for i in (range(2, 3000)):
     a, b, c, d, e = new_step(voltage_s[-1], ms[-1], ns[-1], hs[-1], timestep_s[-1])
     voltage_s.append(a)
@@ -74,8 +73,6 @@ for i in (range(2, 3000)):
     hs.append(d)
     timestep_s.append(round(e, 2)) 
 
-pylab.plot(timestep_s, ms)
-pylab.plot(timestep_s, ns)
-pylab.plot(timestep_s, hs)
+pylab.plot(timestep_s, voltage_s)
 
 pylab.show()
